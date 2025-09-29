@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zynthera • Software House</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --green:#10b981;
+      --green-600:#059669;
+      --green-50:#ecfdf5;
+      --text:#0b1b13;
+      --muted:#6b7280;
+      --bg:#ffffff;
+      --card:#f8fafc;
+      --shadow:0 10px 25px rgba(16,185,129,.15);
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; color:var(--text); background:var(--bg);
+      line-height:1.5; overflow-x:hidden;
+    }
+    /* Canvas de partículas cobrindo toda a interface */
+    #bg-canvas{
+      position:fixed; inset:0; z-index:-1; display:block; width:100vw; height:100vh;
+    }
+
+    /* Header */
+    header{
+      position:sticky; top:0; backdrop-filter:saturate(120%) blur(8px);
+      background:rgba(255,255,255,.75); border-bottom:1px solid rgba(0,0,0,.06);
+      z-index:50;
+    }
+    .container{ width:min(1120px, 92vw); margin:0 auto; }
+    .nav{ display:flex; gap:24px; align-items:center; justify-content:space-between; padding:14px 0; }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px; }
+    .logo{ width:28px; height:28px; border-radius:8px; background:conic-gradient(from 180deg at 50% 50%, var(--green), var(--green-600)); box-shadow:var(--shadow); }
+    .nav a{ text-decoration:none; color:#0f172a; font-weight:600; opacity:.9 }
+    .nav a:hover{ color:var(--green-600) }
+    .cta{ padding:.7rem 1rem; border-radius:999px; background:var(--green); color:#fff !important; box-shadow:var(--shadow); border:0 }
+    .cta:hover{ background:var(--green-600) }
+
+    /* Hero */
+    .hero{ position:relative; min-height:86vh; display:grid; place-items:center; }
+    .hero-inner{ display:grid; gap:20px; text-align:center; padding:80px 0 40px }
+    .eyebrow{ color:var(--green-600); font-weight:700; letter-spacing:.1em; text-transform:uppercase; font-size:.85rem }
+    h1{ font-size: clamp(2rem, 3.6vw + 1rem, 4rem); line-height:1.05; margin:0; }
+    .lead{ color:#334155; font-size: clamp(1rem, .6vw + .9rem, 1.25rem); max-width:800px; margin:0 auto; }
+    .hero-actions{ display:flex; gap:14px; justify-content:center; margin-top:10px }
+
+    /* Botões */
+    .btn{ padding:.9rem 1.1rem; border-radius:14px; border:1px solid rgba(0,0,0,.08); background:#fff; font-weight:600; cursor:pointer; text-decoration:none; display:inline-block }
+    .btn:hover{ border-color:rgba(0,0,0,.15) }
+    /* Corrige conflito: botão primário verde VISÍVEL */
+    .btn.cta{ background:var(--green); color:#fff !important; border:0; box-shadow:var(--shadow) }
+    .btn.cta:hover{ background:var(--green-600) }
+
+    /* Parallax */
+    .parallax{ position:absolute; will-change:transform; pointer-events:none; }
+    .p-leaf{ width:140px; height:140px; opacity:.1; border-radius:50%; background: radial-gradient( circle at 30% 30%, var(--green) 0%, var(--green-600) 60%, transparent 62% ); filter: blur(1px); }
+
+    /* Seções */
+    section{ padding: 96px 0; position:relative }
+    .section-title{ font-size: clamp(1.5rem, 1.6vw + .8rem, 2.2rem); margin:0 0 12px }
+    .section-sub{ color:var(--muted); margin:0 0 32px; max-width:760px }
+
+    /* Grade cards */
+    .grid{ display:grid; gap:18px }
+    .grid.cols-3{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .grid.cols-2{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+    @media (max-width: 900px){ .grid.cols-3{ grid-template-columns:1fr 1fr } }
+    @media (max-width: 640px){ .grid.cols-3,.grid.cols-2{ grid-template-columns:1fr } }
+
+    .card{
+      background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:18px; padding:22px; box-shadow:0 6px 20px rgba(2,6,23,.06);
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+    }
+    .card:hover{ transform: translateY(-4px); border-color: rgba(2,6,23,.1); box-shadow:0 14px 32px rgba(2,6,23,.08) }
+
+    .badge{ display:inline-block; padding:.35rem .6rem; border-radius:999px; background:var(--green-50); color:var(--green-600); font-weight:700; font-size:.75rem; letter-spacing:.02em }
+
+    /* Separadores */
+    .divider{ height:1px; width:100%; background:linear-gradient(90deg, transparent, rgba(0,0,0,.08), transparent); margin: 0 auto; }
+
+    /* CTA final */
+    .cta-section{ background:linear-gradient(180deg, #fff 0%, #f6fffb 100%); }
+    .cta-box{ background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:24px; padding:28px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; box-shadow:var(--shadow) }
+
+    /* Footer */
+    footer{ padding:40px 0; color:#334155; font-size:.9rem }
+    .foot-grid{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px }
+
+    /* Reveal com ida e volta */
+    .reveal{ opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; will-change:opacity,transform }
+    .reveal.on{ opacity:1; transform:translateY(0) }
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <header>
+    <div class="container nav">
+      <div class="brand"><span class="logo"></span> Zynthera</div>
+      <nav style="display:flex; gap:18px; align-items:center">
+        <a href="#servicos">Serviços</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#projetos">Projetos</a>
+        <a href="#contato" class="cta">Fale conosco</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <!-- Parallax -->
+      <div class="parallax p-leaf" data-parallax-speed="0.12" style="top:8%; left:6%"></div>
+      <div class="parallax p-leaf" data-parallax-speed="0.18" style="top:20%; right:8%; transform:rotate(35deg)"></div>
+      <div class="parallax p-leaf" data-parallax-speed="0.08" style="bottom:6%; left:20%; transform:rotate(80deg)"></div>
+
+      <div class="container hero-inner">
+        <span class="eyebrow">Software House</span>
+        <h1 class="reveal">Zynthera — soluções digitais minimalistas e modernas</h1>
+        <p class="lead reveal" style="transition-delay:.08s">Construímos produtos com foco em clareza, performance e experiência. Websites, APIs, integrações e sistemas sob medida.</p>
+        <div class="hero-actions reveal" style="transition-delay:.12s">
+          <a href="#servicos" class="btn">Ver serviços</a>
+          <a href="#contato" class="btn cta">Iniciar projeto</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SERVIÇOS -->
+    <section id="servicos">
+      <div class="container">
+        <h2 class="section-title reveal">O que fazemos</h2>
+        <p class="section-sub reveal" style="transition-delay:.06s">Projetos enxutos e elegantes, do design ao deploy, com base sólida em arquitetura e qualidade.</p>
+        <div class="grid cols-3">
+          <div class="card reveal">
+            <span class="badge">Web / Mobile</span>
+            <h3>Produtos digitais</h3>
+            <p class="muted">Landing pages, e-commerces e apps com foco em UX, acessibilidade e SEO.</p>
+          </div>
+          <div class="card reveal" style="transition-delay:.06s">
+            <span class="badge">APIs</span>
+            <h3>Back-end & integrações</h3>
+            <p>APIs escaláveis, filas, mensageria e integrações com ERPs e gateways.</p>
+          </div>
+          <div class="card reveal" style="transition-delay:.1s">
+            <span class="badge">Cloud</span>
+            <h3>DevOps & Observabilidade</h3>
+            <p>Pipelines, monitoramento, logs e métricas para ambientes estáveis.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SOBRE -->
+    <section id="sobre">
+      <div class="container">
+        <h2 class="section-title reveal">Por que Zynthera?</h2>
+        <div class="grid cols-2">
+          <div class="card reveal">
+            <h3>Minimalismo que performa</h3>
+            <p>Design limpo, código limpo. Menos distração, mais resultado e velocidade.</p>
+          </div>
+          <div class="card reveal" style="transition-delay:.06s">
+            <h3>Parcerias transparentes</h3>
+            <p>Processo colaborativo e comunicação clara do planejamento ao go-live.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PROJETOS -->
+    <section id="projetos">
+      <div class="container">
+        <h2 class="section-title reveal">Projetos em destaque</h2>
+        <p class="section-sub reveal" style="transition-delay:.06s">Algumas entregas recentes com foco em simplicidade e impacto.</p>
+        <div class="grid cols-3">
+          <div class="card reveal">
+            <h3>Portal fintech</h3>
+            <p>Autenticação, dashboard e microserviços em nuvem.</p>
+          </div>
+          <div class="card reveal" style="transition-delay:.06s">
+            <h3>Marketplace B2B</h3>
+            <p>Catálogo, carrinho e integrações logísticas e fiscais.</p>
+          </div>
+          <div class="card reveal" style="transition-delay:.1s">
+            <h3>Analytics em tempo real</h3>
+            <p>Streaming de eventos, alertas e relatórios executivos.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CTA -->
+    <section id="contato" class="cta-section">
+      <div class="container">
+        <div class="cta-box reveal">
+          <div>
+            <h3 style="margin:0 0 6px">Vamos construir algo juntos?</h3>
+            <p style="margin:0; color:#334155">Conte sua ideia e retornamos com um plano enxuto.</p>
+          </div>
+          <a class="cta" href="mailto:contato@zynthera.com">contato@zynthera.com</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div class="brand"><span class="logo"></span> Zynthera</div>
+      <div>© <span id="y"></span> Zynthera. Todos os direitos reservados.</div>
+    </div>
+  </footer>
+
+  <script>
+    const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+
+    // ======== PARALLAX SUAVE ========
+    (function(){
+      const els=[...document.querySelectorAll('[data-parallax-speed]')];
+      let ticking=false;
+      function apply(){
+        const y=window.scrollY||window.pageYOffset;
+        for(const el of els){
+          const speed=parseFloat(el.dataset.parallaxSpeed)||0.1;
+          el.style.transform=`translate3d(0, ${y*speed}px, 0)`;
+        }
+        ticking=false;
+      }
+      window.addEventListener('scroll',()=>{ if(!ticking){ requestAnimationFrame(apply); ticking=true; } }, {passive:true});
+      apply();
+    })();
+
+    // ======== REVEAL (entra e sai) ========
+    (function(){
+      const io=new IntersectionObserver((entries)=>{
+        for(const e of entries){
+          if(e.isIntersecting){ e.target.classList.add('on'); }
+          else { e.target.classList.remove('on'); } // volta o efeito ao rolar para cima
+        }
+      },{ rootMargin:'-10% 0px', threshold:0.15 });
+      document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+    })();
+
+    // ======== PARTÍCULAS (FOLHAS) — mais lento ========
+    (function(){
+      const canvas=document.getElementById('bg-canvas');
+      const ctx=canvas.getContext('2d');
+
+      let W=canvas.width=window.innerWidth;
+      let H=canvas.height=window.innerHeight;
+
+      const DPR= Math.min(2, window.devicePixelRatio || 1);
+      function resizeCanvas(){
+        W=window.innerWidth; H=window.innerHeight;
+        canvas.width=W*DPR; canvas.height=H*DPR; canvas.style.width=W+'px'; canvas.style.height=H+'px';
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+      }
+      resizeCanvas();
+      window.addEventListener('resize', ()=>{ resizeCanvas(); setParticleCount(); });
+
+      let mouse={x:null,y:null,active:false};
+      window.addEventListener('mousemove', (e)=>{ mouse.x=e.clientX; mouse.y=e.clientY; mouse.active=true; });
+      window.addEventListener('mouseleave', ()=>{ mouse.active=false; });
+
+      const leaves=[];
+      const baseDensity=0.00012;
+      let targetCount=0;
+      function setParticleCount(){
+        targetCount = Math.round(W*H*baseDensity);
+        while(leaves.length < targetCount) leaves.push(makeLeaf());
+        while(leaves.length > targetCount) leaves.pop();
+      }
+
+      function rand(a,b){ return a + Math.random()*(b-a); }
+      function makeLeaf(){
+        return {
+          x: rand(0,W),
+          y: rand(-H, H),
+          vx: rand(-.05,.05),
+          vy: rand(.12,.45),           // queda mais lenta
+          rot: rand(0,Math.PI*2),
+          vr: rand(-0.004,0.004),      // rotação mais lenta
+          size: rand(8,16),
+          wobble: rand(0.3,0.8),       // balanço mais suave
+          tint: Math.random()<.5? '#10b981':'#059669'
+        };
+      }
+
+      function drawLeaf(l){
+        const s=l.size;
+        ctx.save();
+        ctx.translate(l.x, l.y);
+        ctx.rotate(l.rot);
+        ctx.beginPath();
+        ctx.moveTo(0, -s*0.6);
+        ctx.bezierCurveTo(s*0.9, -s*0.9, s*0.9, s*0.9, 0, s*0.6);
+        ctx.bezierCurveTo(-s*0.9, s*0.9, -s*0.9, -s*0.9, 0, -s*0.6);
+        ctx.closePath();
+        ctx.fillStyle=l.tint;
+        ctx.globalAlpha=0.17;
+        ctx.fill();
+        ctx.globalAlpha=0.25;
+        ctx.strokeStyle='rgba(0,0,0,.15)';
+        ctx.lineWidth=0.7;
+        ctx.beginPath(); ctx.moveTo(0,-s*0.5); ctx.lineTo(0,s*0.5); ctx.stroke();
+        ctx.restore();
+      }
+
+      let perf=0;
+      function updateLeaf(l){
+        // Gravidade bem leve
+        l.vy += 0.0006; // desacelera a aceleração
+        // Balanço horizontal mais sutil
+        l.x += l.vx + Math.sin(perf*0.0008 + l.y*0.01)*0.035*l.wobble;
+        l.y += l.vy;
+        l.rot += l.vr;
+
+        // Repulsão do mouse (abre espaço de forma mais suave)
+        if(mouse.active){
+          const dx=l.x - mouse.x; const dy=l.y - mouse.y; const d=Math.hypot(dx,dy);
+          const radius=140;
+          if(d < radius){
+            const force = (1 - d/radius) * 0.45; // força mais fraca
+            const ax = (dx / (d||1)) * force;
+            const ay = (dy / (d||1)) * force;
+            l.vx += ax; l.vy += ay;
+          }
+        }
+
+        // Reciclagem
+        if(l.y > H + 20){ l.y = -20; l.x = rand(0,W); l.vy = rand(.1,.35); l.vx = rand(-.05,.05); }
+        if(l.x < -30){ l.x = W + 30 }
+        if(l.x > W + 30){ l.x = -30 }
+      }
+
+      function loop(t){
+        perf=t||0;
+        ctx.clearRect(0,0,W,H);
+        for(const l of leaves){ updateLeaf(l); drawLeaf(l); }
+        requestAnimationFrame(loop);
+      }
+
+      setParticleCount();
+      requestAnimationFrame(loop);
+    })();
+
+    // Ano rodapé
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
