@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root{
       --green:#10b981;
@@ -18,12 +19,18 @@
       --card:#f8fafc;
       --shadow:0 10px 25px rgba(16,185,129,.15);
     }
+
     *,*::before,*::after{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; color:var(--text); background:var(--bg);
-      line-height:1.5; overflow-x:hidden;
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.5;
+      overflow-x:hidden;
     }
+
     /* Canvas de partículas cobrindo toda a interface */
     #bg-canvas{
       position:fixed; inset:0; z-index:-1; display:block; width:100vw; height:100vh;
@@ -31,17 +38,27 @@
 
     /* Header */
     header{
-      position:sticky; top:0; backdrop-filter:saturate(120%) blur(8px);
-      background:rgba(255,255,255,.75); border-bottom:1px solid rgba(0,0,0,.06);
+      position:sticky; top:0;
+      backdrop-filter:saturate(120%) blur(8px);
+      background:rgba(255,255,255,.75);
+      border-bottom:1px solid rgba(0,0,0,.06);
       z-index:50;
     }
     .container{ width:min(1120px, 92vw); margin:0 auto; }
-    .nav{ display:flex; gap:24px; align-items:center; justify-content:space-between; padding:14px 0; }
+    .nav{
+      display:flex; gap:24px; align-items:center; justify-content:space-between; padding:14px 0;
+    }
     .brand{ display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px; }
-    .logo{ width:28px; height:28px; border-radius:8px; background:conic-gradient(from 180deg at 50% 50%, var(--green), var(--green-600)); box-shadow:var(--shadow); }
+    .logo{
+      width:28px; height:28px; border-radius:8px;
+      background:conic-gradient(from 180deg at 50% 50%, var(--green), var(--green-600));
+      box-shadow:var(--shadow);
+    }
     .nav a{ text-decoration:none; color:#0f172a; font-weight:600; opacity:.9 }
     .nav a:hover{ color:var(--green-600) }
-    .cta{ padding:.7rem 1rem; border-radius:999px; background:var(--green); color:#fff !important; box-shadow:var(--shadow); border:0 }
+    .cta{
+      padding:.7rem 1rem; border-radius:999px; background:var(--green); color:#fff !important; box-shadow:var(--shadow); border:0
+    }
     .cta:hover{ background:var(--green-600) }
 
     /* Hero */
@@ -53,20 +70,27 @@
     .hero-actions{ display:flex; gap:14px; justify-content:center; margin-top:10px }
 
     /* Botões */
-    .btn{ padding:.9rem 1.1rem; border-radius:14px; border:1px solid rgba(0,0,0,.08); background:#fff; font-weight:600; cursor:pointer; text-decoration:none; display:inline-block }
+    .btn{
+      padding:.9rem 1.1rem; border-radius:14px; border:1px solid rgba(0,0,0,.08); background:#fff;
+      font-weight:600; cursor:pointer; text-decoration:none; display:inline-block
+    }
     .btn:hover{ border-color:rgba(0,0,0,.15) }
-    /* Corrige conflito: botão primário verde VISÍVEL */
     .btn.cta{ background:var(--green); color:#fff !important; border:0; box-shadow:var(--shadow) }
     .btn.cta:hover{ background:var(--green-600) }
 
     /* Parallax */
     .parallax{ position:absolute; will-change:transform; pointer-events:none; }
-    .p-leaf{ width:140px; height:140px; opacity:.1; border-radius:50%; background: radial-gradient( circle at 30% 30%, var(--green) 0%, var(--green-600) 60%, transparent 62% ); filter: blur(1px); }
+    .p-leaf{
+      width:140px; height:140px; opacity:.1; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, var(--green) 0%, var(--green-600) 60%, transparent 62%);
+      filter: blur(1px);
+    }
 
     /* Seções */
     section{ padding: 96px 0; position:relative }
     .section-title{ font-size: clamp(1.5rem, 1.6vw + .8rem, 2.2rem); margin:0 0 12px }
     .section-sub{ color:var(--muted); margin:0 0 32px; max-width:760px }
+    .muted{ color:var(--muted) }
 
     /* Grade cards */
     .grid{ display:grid; gap:18px }
@@ -76,19 +100,25 @@
     @media (max-width: 640px){ .grid.cols-3,.grid.cols-2{ grid-template-columns:1fr } }
 
     .card{
-      background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:18px; padding:22px; box-shadow:0 6px 20px rgba(2,6,23,.06);
+      background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:18px; padding:22px;
+      box-shadow:0 6px 20px rgba(2,6,23,.06);
       transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
     }
     .card:hover{ transform: translateY(-4px); border-color: rgba(2,6,23,.1); box-shadow:0 14px 32px rgba(2,6,23,.08) }
-
-    .badge{ display:inline-block; padding:.35rem .6rem; border-radius:999px; background:var(--green-50); color:var(--green-600); font-weight:700; font-size:.75rem; letter-spacing:.02em }
+    .badge{
+      display:inline-block; padding:.35rem .6rem; border-radius:999px;
+      background:var(--green-50); color:var(--green-600); font-weight:700; font-size:.75rem; letter-spacing:.02em
+    }
 
     /* Separadores */
     .divider{ height:1px; width:100%; background:linear-gradient(90deg, transparent, rgba(0,0,0,.08), transparent); margin: 0 auto; }
 
     /* CTA final */
     .cta-section{ background:linear-gradient(180deg, #fff 0%, #f6fffb 100%); }
-    .cta-box{ background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:24px; padding:28px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; box-shadow:var(--shadow) }
+    .cta-box{
+      background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:24px; padding:28px;
+      display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; box-shadow:var(--shadow)
+    }
 
     /* Footer */
     footer{ padding:40px 0; color:#334155; font-size:.9rem }
@@ -97,8 +127,19 @@
     /* Reveal com ida e volta */
     .reveal{ opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; will-change:opacity,transform }
     .reveal.on{ opacity:1; transform:translateY(0) }
+
+    /* Botão flutuante WhatsApp */
+    .wa-fab{
+      position:fixed; right:18px; bottom:18px; z-index:60;
+      display:flex; align-items:center; gap:10px;
+      background:var(--green); color:#fff; text-decoration:none; font-weight:700;
+      padding:.9rem 1rem; border-radius:999px; box-shadow:var(--shadow);
+    }
+    .wa-fab:hover{ background:var(--green-600) }
+    .wa-dot{ width:10px; height:10px; border-radius:50%; background:#fff; opacity:.9 }
   </style>
 </head>
+
 <body>
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
@@ -107,9 +148,9 @@
       <div class="brand"><span class="logo"></span> Zynthera</div>
       <nav style="display:flex; gap:18px; align-items:center">
         <a href="#servicos">Serviços</a>
-        <a href="#sobre">Sobre</a>
+        <a href="#sobre">Como trabalhamos</a>
         <a href="#projetos">Projetos</a>
-        <a href="#contato" class="cta">Fale conosco</a>
+        <a href="#contato" class="cta" aria-label="Falar no WhatsApp">Fale no WhatsApp</a>
       </nav>
     </div>
   </header>
@@ -123,12 +164,17 @@
       <div class="parallax p-leaf" data-parallax-speed="0.08" style="bottom:6%; left:20%; transform:rotate(80deg)"></div>
 
       <div class="container hero-inner">
-        <span class="eyebrow">Software House</span>
-        <h1 class="reveal">Zynthera — soluções digitais minimalistas e modernas</h1>
-        <p class="lead reveal" style="transition-delay:.08s">Construímos produtos com foco em clareza, performance e experiência. Websites, APIs, integrações e sistemas sob medida.</p>
+        <span class="eyebrow">Sites para pequenas empresas</span>
+        <h1 class="reveal">Seu site profissional, rápido e bonito — que chama no WhatsApp</h1>
+        <p class="lead reveal" style="transition-delay:.08s">
+          Coloque seu negócio no mapa em 7–15 dias: site enxuto, performance alta e foco em gerar contato.
+        </p>
         <div class="hero-actions reveal" style="transition-delay:.12s">
           <a href="#servicos" class="btn">Ver serviços</a>
-          <a href="#contato" class="btn cta">Iniciar projeto</a>
+          <a href="https://wa.me/5549989210641?text=Ol%C3%A1%20Zynthera!%20Quero%20um%20site%20para%20minha%20empresa."
+             class="btn cta" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp (49 98921-0641)">
+            Chamar no WhatsApp
+          </a>
         </div>
       </div>
     </section>
@@ -138,23 +184,46 @@
     <!-- SERVIÇOS -->
     <section id="servicos">
       <div class="container">
-        <h2 class="section-title reveal">O que fazemos</h2>
-        <p class="section-sub reveal" style="transition-delay:.06s">Projetos enxutos e elegantes, do design ao deploy, com base sólida em arquitetura e qualidade.</p>
+        <h2 class="section-title reveal">O que entregamos na prática</h2>
+        <p class="section-sub reveal" style="transition-delay:.06s">
+          Pacotes diretos ao ponto para quem precisa aparecer no Google e receber pedidos no WhatsApp.
+        </p>
+
         <div class="grid cols-3">
           <div class="card reveal">
-            <span class="badge">Web / Mobile</span>
-            <h3>Produtos digitais</h3>
-            <p class="muted">Landing pages, e-commerces e apps com foco em UX, acessibilidade e SEO.</p>
+            <span class="badge">Site vitrine</span>
+            <h3>Presença online completa</h3>
+            <p class="muted">Páginas essenciais (início, serviços, sobre, contato), botão WhatsApp em destaque, SEO local e integração com Google Meu Negócio.</p>
           </div>
+
           <div class="card reveal" style="transition-delay:.06s">
-            <span class="badge">APIs</span>
-            <h3>Back-end & integrações</h3>
-            <p>APIs escaláveis, filas, mensageria e integrações com ERPs e gateways.</p>
+            <span class="badge">Landing page</span>
+            <h3>Campanhas que convertem</h3>
+            <p class="muted">Página única focada em conversão para ofertas específicas. Ideal para anúncios e captação rápida de leads.</p>
           </div>
+
           <div class="card reveal" style="transition-delay:.1s">
-            <span class="badge">Cloud</span>
-            <h3>DevOps & Observabilidade</h3>
-            <p>Pipelines, monitoramento, logs e métricas para ambientes estáveis.</p>
+            <span class="badge">Loja simples</span>
+            <h3>Catálogo com pedido no Whats</h3>
+            <p class="muted">Catálogo leve com carrinho básico e fechamento do pedido por WhatsApp. Sem complicação.</p>
+          </div>
+
+          <div class="card reveal" style="transition-delay:.14s">
+            <span class="badge">Hospedagem & domínio</span>
+            <h3>Configuração completa</h3>
+            <p class="muted">Ajudamos a registrar seu .com.br, configurar DNS e publicar o site com certificado SSL.</p>
+          </div>
+
+          <div class="card reveal" style="transition-delay:.18s">
+            <span class="badge">Otimização</span>
+            <h3>Site rápido e leve</h3>
+            <p class="muted">Boas práticas de performance, imagens otimizadas e notas altas em Core Web Vitals.</p>
+          </div>
+
+          <div class="card reveal" style="transition-delay:.22s">
+            <span class="badge">Suporte</span>
+            <h3>Atualizações simples</h3>
+            <p class="muted">Troca de fotos, texto e banners quando precisar. Sem burocracia, direto no WhatsApp.</p>
           </div>
         </div>
       </div>
@@ -162,18 +231,31 @@
 
     <div class="divider"></div>
 
-    <!-- SOBRE -->
+    <!-- SOBRE / PROCESSO -->
     <section id="sobre">
       <div class="container">
-        <h2 class="section-title reveal">Por que Zynthera?</h2>
+        <h2 class="section-title reveal">Como trabalhamos</h2>
+        <p class="section-sub reveal" style="transition-delay:.06s">
+          Processo claro, comunicação direta e entregas rápidas.
+        </p>
+
         <div class="grid cols-2">
           <div class="card reveal">
-            <h3>Minimalismo que performa</h3>
-            <p>Design limpo, código limpo. Menos distração, mais resultado e velocidade.</p>
+            <h3>4 passos simples</h3>
+            <p class="muted">
+              <strong>1. Briefing:</strong> você conta seu negócio e envia referências.<br/>
+              <strong>2. Protótipo:</strong> mostramos a primeira versão do layout.<br/>
+              <strong>3. Desenvolvimento:</strong> conteúdo, SEO e integrações.<br/>
+              <strong>4. Publicação:</strong> domínio, SSL e monitoramento inicial.
+            </p>
           </div>
+
           <div class="card reveal" style="transition-delay:.06s">
-            <h3>Parcerias transparentes</h3>
-            <p>Processo colaborativo e comunicação clara do planejamento ao go-live.</p>
+            <h3>O que você pode esperar</h3>
+            <p class="muted">
+              Site que carrega rápido no celular, botão do WhatsApp visível, textos objetivos e imagens leves.
+              Entrega típica: <strong>7–15 dias</strong> dependendo do conteúdo.
+            </p>
           </div>
         </div>
       </div>
@@ -185,19 +267,22 @@
     <section id="projetos">
       <div class="container">
         <h2 class="section-title reveal">Projetos em destaque</h2>
-        <p class="section-sub reveal" style="transition-delay:.06s">Algumas entregas recentes com foco em simplicidade e impacto.</p>
+        <p class="section-sub reveal" style="transition-delay:.06s">
+          Exemplos reais de necessidades comuns de pequenas empresas.
+        </p>
+
         <div class="grid cols-3">
           <div class="card reveal">
-            <h3>Portal fintech</h3>
-            <p>Autenticação, dashboard e microserviços em nuvem.</p>
+            <h3>Clínica local</h3>
+            <p class="muted">Site vitrine com serviços, equipe, mapa e agendamento por WhatsApp.</p>
           </div>
           <div class="card reveal" style="transition-delay:.06s">
-            <h3>Marketplace B2B</h3>
-            <p>Catálogo, carrinho e integrações logísticas e fiscais.</p>
+            <h3>Restaurante</h3>
+            <p class="muted">Cardápio simples, fotos otimizadas e botão para pedidos rápidos.</p>
           </div>
           <div class="card reveal" style="transition-delay:.1s">
-            <h3>Analytics em tempo real</h3>
-            <p>Streaming de eventos, alertas e relatórios executivos.</p>
+            <h3>Prestador de serviços</h3>
+            <p class="muted">Landing para captação de orçamentos com depoimentos e portfólio.</p>
           </div>
         </div>
       </div>
@@ -205,15 +290,22 @@
 
     <div class="divider"></div>
 
-    <!-- CTA -->
+    <!-- CTA / CONTATO -->
     <section id="contato" class="cta-section">
       <div class="container">
         <div class="cta-box reveal">
           <div>
-            <h3 style="margin:0 0 6px">Vamos construir algo juntos?</h3>
-            <p style="margin:0; color:#334155">Conte sua ideia e retornamos com um plano enxuto.</p>
+            <h3 style="margin:0 0 6px">Vamos construir algo simples e eficiente?</h3>
+            <p style="margin:0; color:#334155">
+              Me chame no WhatsApp e enviamos um plano direto ao ponto para o seu negócio.
+            </p>
           </div>
-          <a class="cta" href="mailto:contato@zynthera.com">contato@zynthera.com</a>
+          <a class="cta"
+             href="https://wa.me/5549989210641?text=Ol%C3%A1%20Zynthera!%20Quero%20um%20site%20para%20minha%20empresa."
+             target="_blank" rel="noopener"
+             aria-label="Chamar no WhatsApp (49 98921-0641)">
+            (49) 98921-0641 • WhatsApp
+          </a>
         </div>
       </div>
     </section>
@@ -226,10 +318,17 @@
     </div>
   </footer>
 
+  <!-- FAB WhatsApp -->
+  <a class="wa-fab"
+     href="https://wa.me/5549989210641?text=Ol%C3%A1%20Zynthera!%20Quero%20um%20site%20para%20minha%20empresa."
+     target="_blank" rel="noopener" aria-label="Abrir conversa no WhatsApp">
+     <span class="wa-dot" aria-hidden="true"></span> Falar no WhatsApp
+  </a>
+
   <script>
     const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 
-    // ======== PARALLAX SUAVE ========
+    // ======== PARALLAX SUAVE (fix: template literal) ========
     (function(){
       const els=[...document.querySelectorAll('[data-parallax-speed]')];
       let ticking=false;
@@ -237,11 +336,13 @@
         const y=window.scrollY||window.pageYOffset;
         for(const el of els){
           const speed=parseFloat(el.dataset.parallaxSpeed)||0.1;
-          el.style.transform=`translate3d(0, ${y*speed}px, 0)`;
+          el.style.transform = `translate3d(0, ${y*speed}px, 0)`;
         }
         ticking=false;
       }
-      window.addEventListener('scroll',()=>{ if(!ticking){ requestAnimationFrame(apply); ticking=true; } }, {passive:true});
+      window.addEventListener('scroll',()=>{
+        if(!ticking){ requestAnimationFrame(apply); ticking=true; }
+      }, {passive:true});
       apply();
     })();
 
@@ -256,18 +357,18 @@
       document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
     })();
 
-    // ======== PARTÍCULAS (FOLHAS) — mais lento ========
+    // ======== PARTÍCULAS (FOLHAS) — mais lento e só em background ========
     (function(){
       const canvas=document.getElementById('bg-canvas');
       const ctx=canvas.getContext('2d');
-
       let W=canvas.width=window.innerWidth;
       let H=canvas.height=window.innerHeight;
-
       const DPR= Math.min(2, window.devicePixelRatio || 1);
+
       function resizeCanvas(){
         W=window.innerWidth; H=window.innerHeight;
-        canvas.width=W*DPR; canvas.height=H*DPR; canvas.style.width=W+'px'; canvas.style.height=H+'px';
+        canvas.width=W*DPR; canvas.height=H*DPR;
+        canvas.style.width=W+'px'; canvas.style.height=H+'px';
         ctx.setTransform(DPR,0,0,DPR,0,0);
       }
       resizeCanvas();
@@ -278,8 +379,9 @@
       window.addEventListener('mouseleave', ()=>{ mouse.active=false; });
 
       const leaves=[];
-      const baseDensity=0.00012;
+      const baseDensity=0.00010; // levemente reduzido
       let targetCount=0;
+
       function setParticleCount(){
         targetCount = Math.round(W*H*baseDensity);
         while(leaves.length < targetCount) leaves.push(makeLeaf());
@@ -289,14 +391,10 @@
       function rand(a,b){ return a + Math.random()*(b-a); }
       function makeLeaf(){
         return {
-          x: rand(0,W),
-          y: rand(-H, H),
-          vx: rand(-.05,.05),
-          vy: rand(.12,.45),           // queda mais lenta
-          rot: rand(0,Math.PI*2),
-          vr: rand(-0.004,0.004),      // rotação mais lenta
-          size: rand(8,16),
-          wobble: rand(0.3,0.8),       // balanço mais suave
+          x: rand(0,W), y: rand(-H, H),
+          vx: rand(-.05,.05), vy: rand(.12,.45), // queda lenta
+          rot: rand(0,Math.PI*2), vr: rand(-0.004,0.004), // rotação lenta
+          size: rand(8,16), wobble: rand(0.3,0.8),
           tint: Math.random()<.5? '#10b981':'#059669'
         };
       }
@@ -314,28 +412,32 @@
         ctx.fillStyle=l.tint;
         ctx.globalAlpha=0.17;
         ctx.fill();
+
         ctx.globalAlpha=0.25;
-        ctx.strokeStyle='rgba(0,0,0,.15)';
+        ctx.strokeStyle='rgba(0,0,0,.12)';
         ctx.lineWidth=0.7;
-        ctx.beginPath(); ctx.moveTo(0,-s*0.5); ctx.lineTo(0,s*0.5); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0,-s*0.5);
+        ctx.lineTo(0,s*0.5);
+        ctx.stroke();
         ctx.restore();
       }
 
       let perf=0;
       function updateLeaf(l){
-        // Gravidade bem leve
-        l.vy += 0.0006; // desacelera a aceleração
-        // Balanço horizontal mais sutil
+        l.vy += 0.0006; // gravidade leve
         l.x += l.vx + Math.sin(perf*0.0008 + l.y*0.01)*0.035*l.wobble;
         l.y += l.vy;
         l.rot += l.vr;
 
-        // Repulsão do mouse (abre espaço de forma mais suave)
+        // Repulsão do mouse (abre espaço de forma suave)
         if(mouse.active){
-          const dx=l.x - mouse.x; const dy=l.y - mouse.y; const d=Math.hypot(dx,dy);
+          const dx=l.x - mouse.x;
+          const dy=l.y - mouse.y;
+          const d=Math.hypot(dx,dy);
           const radius=140;
           if(d < radius){
-            const force = (1 - d/radius) * 0.45; // força mais fraca
+            const force = (1 - d/radius) * 0.45;
             const ax = (dx / (d||1)) * force;
             const ay = (dy / (d||1)) * force;
             l.vx += ax; l.vy += ay;
